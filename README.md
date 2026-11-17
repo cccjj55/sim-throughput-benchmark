@@ -66,6 +66,27 @@ python bench/accuracy.py --duration 1.0  # dt 1e-3..1e-2，参考解 dt=1e-4
 | 0.005 | _待填_ | _待填_ | ✅/❌ | |
 | 0.01 | _待填_ | _待填_ | ✅/❌ | |
 
+## 实测 / Measured
+
+环境：RTX 5070 Ti Laptop 12 GB · WSL2 Ubuntu 24.04 · 24 核 · mujoco 4.0.1 · jax (CPU build)
+
+| backend | envs | env-steps/s | steps/s | spread |
+| --- | --- | --- | --- | --- |
+| mujoco_cpu | 8 | 209,642 | 26,205 | 0.3% |
+| mujoco_cpu | 32 | 212,040 | 6,626 | 1.5% |
+| mujoco_cpu | 64 | 212,403 | 3,319 | 0.4% |
+| mjx (cpu) | 8 | 316,572 | 39,572 | 1.9% |
+| mjx (cpu) | 32 | 449,696 | 14,053 | 1.9% |
+| mjx (cpu) | 64 | **522,129** | 8,158 | 2.1% |
+
+两个读数值得说：
+
+1. **`mujoco_cpu` 的吞吐跟 env 数几乎无关**（209k → 212k）：它是 Python 循环逐个环境步进，加环境只是加循环次数，不会变快。
+2. **`mjx` 在 CPU 上反而更快，而且 env 越多差距越大**（1.5× → 2.5×）：一次 batched 调用摊掉了大部分派发开销。
+   所以"上 GPU 才快"是个未经检验的假设——先把 CPU 基线测出来，才知道 GPU 那几十倍里有多少是真算力。
+
+> GPU（`--device cuda`）的数字待补：本机 jax CUDA wheel 体积大、下载未完成，代码路径已用 CPU 跑通。
+
 ## 状态
 
 - [x] 统一 Backend 契约 + dummy 后端（自测）
