@@ -34,11 +34,17 @@ def parse_int_list(text: str) -> list[int]:
     return values
 
 
-def run_one(backend_name: str, envs: int, steps: int, repeat: int, warmup: int, seed: int) -> dict:
+def run_one(backend_name: str, envs: int, steps: int, repeat: int, warmup: int,
+            seed: int, extra: dict | None = None) -> dict:
     cls = load(backend_name)
+    extra = dict(extra or {})
     walls = []
     for run in range(repeat):
-        backend = cls(envs=envs, seed=seed + run)
+        try:
+            backend = cls(envs=envs, seed=seed + run, **extra)
+        except TypeError:
+            # backend does not accept the extra kwargs (e.g. dummy has no device)
+            backend = cls(envs=envs, seed=seed + run)
         if warmup:
             backend.step(warmup)          # JIT / shader / allocator warm-up
         start = time.perf_counter()
@@ -83,12 +89,26 @@ def main() -> int:
     ap.add_argument('--repeat', type=int, default=3)
     ap.add_argument('--warmup', type=int, default=20)
     ap.add_argument('--seed', type=int, default=7)
+    ap.add_argument('--device', default='', help="backend device, e.g. cuda / cpu (mjx)")
+    ap.add_argument('--backend-kwargs', default='',
+                    help='extra backend kwargs, e.g. "timestep=0.001"')
     ap.add_argument('--out', default='results/latest.csv')
     args = ap.parse_args()
 
+    extra = {}
+    if args.device:
+        extra['device'] = args.device
+    for item in filter(None, (x.strip() for x in args.backend_kwargs.split(','))):
+        k, _, v = item.partition('=')
+        try:
+            extra[k.strip()] = float(v) if '.' in v else int(v)
+        except ValueError:
+            extra[k.strip()] = v.strip()
+
     rows = []
     for envs in args.envs:
-        row = run_one(args.backend, envs, args.steps, args.repeat, args.warmup, args.seed)
+        row = run_one(args.backend, envs, args.steps, args.repeat, args.warmup,
+                      args.seed, extra)
         rows.append(row)
         print(f"{row['backend']} envs={envs}: {row['env_steps_per_s']:,} env-steps/s "
               f"(wall {row['wall_s_best']:.3f}s, spread {row['spread_pct']}%)")
