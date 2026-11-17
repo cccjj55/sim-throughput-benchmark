@@ -1,5 +1,7 @@
 name: ci
+
 on: [push, pull_request]
+
 jobs:
   smoke:
     runs-on: ubuntu-22.04
@@ -8,5 +10,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - name: Harness smoke test (dummy backend, no GPU)
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install mujoco
+      - name: Harness smoke test (dummy backend)
         run: python bench/harness.py --backend dummy --envs 64,256 --steps 50 --repeat 1
+      - name: Harness on MuJoCo CPU baseline
+        run: python bench/harness.py --backend mujoco_cpu --envs 8,32 --steps 100 --repeat 2
+      - name: Accuracy sweep (dt vs RMSE)
+        run: python bench/accuracy.py --duration 0.5
+      - name: Artifacts are generated
+        run: |
+          ls -l results/
+          test -f results/latest.csv
+          test -f results/accuracy.csv
