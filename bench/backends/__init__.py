@@ -17,7 +17,7 @@ from __future__ import annotations
 import importlib
 from typing import Type
 
-AVAILABLE = ('dummy', 'gazebo', 'isaac_lab', 'mjx')
+AVAILABLE = ('dummy', 'mujoco_cpu', 'gazebo', 'isaac_lab', 'mjx')
 
 
 def load(name: str) -> Type:
