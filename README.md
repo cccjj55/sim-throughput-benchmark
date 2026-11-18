@@ -70,6 +70,8 @@ python bench/accuracy.py --duration 1.0  # dt 1e-3..1e-2，参考解 dt=1e-4
 
 环境：RTX 5070 Ti Laptop 12 GB · WSL2 Ubuntu 24.04 · 24 核 · mujoco 4.0.1 · jax (CPU build)
 
+![throughput](docs/throughput.svg)
+
 | backend | envs | env-steps/s | steps/s | spread |
 | --- | --- | --- | --- | --- |
 | mujoco_cpu | 8 | 209,642 | 26,205 | 0.3% |
