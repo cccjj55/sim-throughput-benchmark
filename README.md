@@ -106,3 +106,7 @@ python bench/accuracy.py --duration 1.0  # dt 1e-3..1e-2，参考解 dt=1e-4
 ## License
 
 MIT
+
+## 相关 / Related
+
+- [robot-sim-benchmarks](https://github.com/cccjj55/robot-sim-benchmarks) — published throughput and training-time claims from other projects, with hardware, version and an evidence label.本文的数字也在那张表里（`MEASURED` 行）。
