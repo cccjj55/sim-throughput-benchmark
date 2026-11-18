@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="320" viewBox="0 0 760 320" role="img" aria-label="Throughput comparison: MuJoCo CPU vs MJX CPU at 8, 32 and 64 environments">
+  <rect width="760" height="320" fill="#ffffff"/>
+  <text x="24" y="30" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#0f172a">env-steps/s — same model, same timestep, different engine</text>
+  <text x="24" y="50" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#64748b">cart-pole · dt=0.002 · 200 steps per run · RTX 5070 Ti laptop / WSL2 / 24 cores</text>
+
+  <!-- gridlines -->
+  <g stroke="#e2e8f0" stroke-width="1">
+    <line x1="70" y1="250" x2="720" y2="250"/>
+    <line x1="70" y1="215" x2="720" y2="215"/>
+    <line x1="70" y1="180" x2="720" y2="180"/>
+    <line x1="70" y1="146" x2="720" y2="146"/>
+    <line x1="70" y1="111" x2="720" y2="111"/>
+    <line x1="70" y1="76"  x2="720" y2="76"/>
+  </g>
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#94a3b8" text-anchor="end">
+    <text x="62" y="254">0</text>
+    <text x="62" y="219">100k</text>
+    <text x="62" y="184">200k</text>
+    <text x="62" y="150">300k</text>
+    <text x="62" y="115">400k</text>
+    <text x="62" y="80">500k</text>
+  </g>
+
+  <!-- env 8 -->
+  <rect x="86"  y="177.6" width="70" height="72.4"  fill="#64748b"/>
+  <rect x="164" y="140.7" width="70" height="109.3" fill="#0f766e"/>
+  <text x="121" y="170" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#334155" text-anchor="middle">210k</text>
+  <text x="199" y="133" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#0f766e" text-anchor="middle">317k</text>
+
+  <!-- env 32 -->
+  <rect x="311" y="176.8" width="70" height="73.2"  fill="#64748b"/>
+  <rect x="389" y="94.7"  width="70" height="155.3" fill="#0f766e"/>
+  <text x="346" y="169" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#334155" text-anchor="middle">212k</text>
+  <text x="424" y="87"  font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#0f766e" text-anchor="middle">450k</text>
+
+  <!-- env 64 -->
+  <rect x="536" y="176.7" width="70" height="73.3"  fill="#64748b"/>
+  <rect x="614" y="69.7"  width="70" height="180.3" fill="#0f766e"/>
+  <text x="571" y="169" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#334155" text-anchor="middle">212k</text>
+  <text x="649" y="62"  font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#0f766e" text-anchor="middle">522k</text>
+
+  <!-- x labels -->
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#475569" text-anchor="middle">
+    <text x="160" y="270">8 envs</text>
+    <text x="385" y="270">32 envs</text>
+    <text x="610" y="270">64 envs</text>
+  </g>
+
+  <!-- legend -->
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#475569">
+    <rect x="86" y="292" width="12" height="12" fill="#64748b"/>
+    <text x="104" y="302">MuJoCo CPU (python loop)</text>
+    <rect x="286" y="292" width="12" height="12" fill="#0f766e"/>
+    <text x="304" y="302">MJX (JAX, batched on CPU)</text>
+  </g>
+  <text x="720" y="302" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#94a3b8" text-anchor="end">flat vs scaling with env count</text>
+</svg>
